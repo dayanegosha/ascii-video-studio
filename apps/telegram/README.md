@@ -1,10 +1,11 @@
-# ascii-bot
+# ASCII Video Studio — Telegram Bot
 
 Telegram bot that turns a video into **ASCII-art video**. Send a clip, pick a few
 options, and the bot renders every frame as colored or monochrome ASCII and sends
 the result back as an `.mp4`.
 
-> Looking for the in-browser version? See the companion **[ascii-app](https://github.com/dayanegosha/ascii-app)** (VK Mini App).
+> Looking for private, in-browser processing? See the
+> **[Web / VK Mini App edition](../web)** in this workspace.
 
 ## Features
 
@@ -26,8 +27,8 @@ the result back as an `.mp4`.
 ## Setup
 
 ```bash
-git clone https://github.com/dayanegosha/ascii-bot.git
-cd ascii-bot
+git clone https://github.com/dayanegosha/ascii-video-studio.git
+cd ascii-video-studio/apps/telegram
 
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate

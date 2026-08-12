@@ -1,10 +1,11 @@
-# ascii-app
+# ASCII Video Studio — Web / VK Mini App
 
 A **VK Mini App** that converts a video into **ASCII-art video** entirely in the
 browser — no upload, no backend. Pick a few options, and every frame is redrawn
 as ASCII on a `<canvas>` and recorded back into a playable clip.
 
-> Prefer Telegram? See the companion **[ascii-bot](https://github.com/dayanegosha/ascii-bot)**.
+> Need server-side rendering in a chat? See the
+> **[Telegram edition](../telegram)** in this workspace.
 
 ## Features
 
@@ -25,8 +26,8 @@ No framework, no build step required to run.
 ## Run locally
 
 ```bash
-git clone https://github.com/dayanegosha/ascii-app.git
-cd ascii-app
+git clone https://github.com/dayanegosha/ascii-video-studio.git
+cd ascii-video-studio/apps/web
 
 npm install
 npm start          # serves the folder on a local static server
