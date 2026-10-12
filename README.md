@@ -10,10 +10,9 @@
 
 </div>
 
-ASCII Video Studio is a unified workspace for two complete video converters:
-a private, browser-only edition for VK Mini Apps and a scalable Telegram bot.
-Both transform ordinary clips into animated ASCII art with configurable detail,
-character density and color.
+ASCII Video Studio contains two video converters: a browser version for VK
+Mini Apps and a Telegram bot. Both turn ordinary clips into animated ASCII art
+with adjustable detail, character density and color.
 
 ## Choose an edition
 
@@ -45,12 +44,11 @@ Each edition has its own setup guide and dependencies. Start with
 [`apps/web/README.md`](apps/web/README.md) or
 [`apps/telegram/README.md`](apps/telegram/README.md).
 
-## Why one repository?
+## Project history
 
-The web application and Telegram bot solve the same product problem for
-different audiences. Keeping them together makes their capabilities easy to
-compare, keeps the public roadmap coherent and preserves the complete commit
-history of both original projects.
+The browser application and Telegram bot started as separate projects. They
+now live together because they solve the same conversion task, while retaining
+their original commit history.
 
 ## License
 

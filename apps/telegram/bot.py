@@ -1,4 +1,3 @@
-# devz.py
 import os
 import cv2
 import numpy as np
@@ -21,7 +20,6 @@ import tempfile
 import time
 import multiprocessing
 
-# === Конфигурация ===
 API_TOKEN = os.getenv("BOT_TOKEN", "")
 if not API_TOKEN:
     raise SystemExit(
@@ -31,11 +29,8 @@ if not API_TOKEN:
 bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
-# === Настройки ASCII / шрифт ===
-# Расширенный набор символов для лучшего градиента и качества, как на примерах
 ASCII_CHARS = r" .:+-*#%"
 
-# Попытка найти моноширинный шрифт (macOS / Linux common paths). Если не найден — fallback.
 FONT_PATHS = [
     "/System/Library/Fonts/Supplemental/Courier New Bold.ttf",
     "/System/Library/Fonts/Supplemental/Courier New.ttf",
@@ -53,18 +48,14 @@ for p in FONT_PATHS:
 if FONT_PATH is None:
     print("[WARN] System mono font not found — using default PIL font. Install a mono TTF for better visuals.")
 
-# Размеры шрифта для разных настроек и качеств (для ультра уменьшили размер шрифта для ускорения, но сохранили качество)
 FONT_SIZES_ORDINARY = {"маленький": 48, "средний": 24, "большой": 12}
 FONT_SIZES_ULTRA = {"маленький": 16, "средний": 10, "большой": 6}
 
-# Параметры производительности
-MAX_WORKERS = os.cpu_count() or 4  # Используем количество ядер CPU
+MAX_WORKERS = os.cpu_count() or 4
 
-# Состояния пользователей
 user_settings = {}
 user_stop_events = {}
 
-# === Вспомогательные функции ===
 def map_gray_to_char(gray_value: int) -> str:
     idx = gray_value * (len(ASCII_CHARS) - 1) // 255
     return ASCII_CHARS[idx]
@@ -139,7 +130,6 @@ def frame_to_ascii_image_pil(frame, size="medium", colored=False, quality="об�
 
     return np.array(img_pil)
 
-# Worker function for processing individual frames
 def worker(i_frame, temp_dir, size, colored, quality, stop_event):
     try:
         input_file = f"{temp_dir}/input_frame_{i_frame:05d}.jpg"
@@ -160,7 +150,6 @@ def format_eta(seconds):
     secs = int(seconds % 60)
     return f"{minutes:02d}:{secs:02d}"
 
-# === Обработка видео с прогрессом, логами и многопоточностью ===
 async def process_video_progress(file_path: str, size: str, colored: bool, quality: str, message: Message):
     user_id = message.from_user.id
     manager = multiprocessing.Manager()
@@ -177,7 +166,6 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
 
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         if total_frames == 0:
-            # Fallback count
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             total_frames = 0
             while True:
@@ -188,7 +176,6 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
             cap.release()
             cap = cv2.VideoCapture(file_path)  # Reopen
 
-        # Check duration
         duration_sec = total_frames / fps
         if duration_sec > 180:
             cap.release()
@@ -205,7 +192,6 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
         out_path = f"ascii_{message.from_user.id}_{int(asyncio.get_event_loop().time())}.mp4"
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            # Pre-extract all frames to temp jpgs
             start_extract = time.time()
             for i in range(total_frames):
                 if stop_event.is_set():
@@ -223,7 +209,7 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
                 else:
                     eta = 0
                 print(f"[INFO] Извлечен кадр {i+1}/{total_frames} ({percent}%)")
-                if i % 10 == 0:  # Update less frequently
+                if i % 10 == 0:
                     try:
                         await bot.edit_message_text(
                             text=f"Извлечение кадров: {percent}% (Примерное время ожидания: {format_eta(eta)})",
@@ -267,14 +253,12 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
                         except Exception:
                             pass
 
-            # Build video from temp frames
             print("[INFO] Все кадры обработаны. Начинаю сборку видео...")
             frame_files = [f"{temp_dir}/ascii_frame_{i:05d}.jpg" for i in range(total_frames)]
             clip = ImageSequenceClip(frame_files, fps=fps)
             clip.write_videofile(out_path, codec="libx264", audio=False, threads=MAX_WORKERS, bitrate="8000k", verbose=False, logger=None)
             print(f"[INFO] Видео сохранено: {out_path}")
 
-        # Delete progress
         try:
             await bot.delete_message(chat_id=message.chat.id, message_id=progress_msg.message_id)
         except Exception:
@@ -291,7 +275,6 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
         if user_id in user_stop_events:
             del user_stop_events[user_id]
 
-# === Хэндлеры ===
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
     kb = ReplyKeyboardMarkup(
@@ -382,7 +365,6 @@ async def cmd_stop(message: Message):
 async def restart_quick(message: Message):
     await cmd_start(message)
 
-# === Запуск ===
 async def main():
     print("[INFO] Бот запущен и ждёт сообщений...")
     await dp.start_polling(bot)
