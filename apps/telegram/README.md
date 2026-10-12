@@ -61,4 +61,4 @@ Frames are processed in parallel and stitched into a video with MoviePy.
 
 ## License
 
-[MIT](LICENSE) © George Zhurik
+[MIT](../../LICENSE) © George Zhurik

@@ -51,4 +51,4 @@ into the final video.
 
 ## License
 
-[MIT](LICENSE) © George Zhurik
+[MIT](../../LICENSE) © George Zhurik
