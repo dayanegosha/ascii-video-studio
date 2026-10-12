@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/project-card.svg" alt="ascii-video-studio project card" width="100%" /></p>
+
 <div align="center">
 
 # ASCII Video Studio
