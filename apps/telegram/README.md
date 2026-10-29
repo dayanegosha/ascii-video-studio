@@ -1,64 +1,31 @@
-# ASCII Video Studio — Telegram Bot
+# .ascii video studio — telegram
 
-Telegram bot that turns a video into **ASCII-art video**. Send a clip, pick a few
-options, and the bot renders every frame as colored or monochrome ASCII and sends
-the result back as an `.mp4`.
+Бот превращает видео в ASCII-анимацию и отправляет результат в MP4. Кадры обрабатываются на сервере через Python, Pillow и MoviePy, видео собирается с помощью FFmpeg.
 
-> Looking for private, in-browser processing? See the
-> **[Web / VK Mini App edition](../web)** in this workspace.
+Можно выбрать детализацию, цветной или монохромный режим и качество: обычное до 1080p или ультра до 4K. Видео ограничено тремя минутами, команда `/stop` отменяет обработку.
 
-## Features
+Браузерная версия находится в [`apps/web`](../web).
 
-- Frame-by-frame ASCII rendering with a tunable character ramp (` .:+-*#%`)
-- **Colored** or **monochrome** output
-- Three detail sizes (small / medium / large) and two quality tiers
-  (`обычное` up to 1080p, `ультра` up to 4K)
-- Multi-core rendering via `ProcessPoolExecutor` — uses all CPU cores
-- Live progress with ETA, and a `/stop` command to cancel a running job
-- Hard limit of 3 minutes per video to keep memory and time in check
+## запуск
 
-## Requirements
+Нужны Python 3.10+, FFmpeg в `PATH` и токен от [@BotFather](https://t.me/BotFather). Бот ищет моноширинный TTF-шрифт в системных папках macOS и Linux; если не найдёт, использует стандартный шрифт Pillow.
 
-- Python 3.10+
-- [FFmpeg](https://ffmpeg.org/) on `PATH` (used by MoviePy to write the video)
-- A monospaced TTF font (the bot auto-detects common macOS/Linux fonts and
-  falls back to PIL's default if none is found)
-
-## Setup
-
-```bash
+```sh
 git clone https://github.com/dayanegosha/ascii-video-studio.git
 cd ascii-video-studio/apps/telegram
-
 python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-## Run
-
-The bot token is read from the `BOT_TOKEN` environment variable — nothing is
-hardcoded. Get a token from [@BotFather](https://t.me/BotFather) and run:
-
-```bash
-export BOT_TOKEN="123456:your-token-here"   # Windows: set BOT_TOKEN=...
+export BOT_TOKEN="token-from-botfather"
 python bot.py
 ```
 
-## Usage
+На Windows окружение активируется командой `.venv\Scripts\activate`, токен задаётся через `set BOT_TOKEN=...` в cmd или `$env:BOT_TOKEN="..."` в PowerShell.
 
-1. Open a chat with the bot and send `/start`.
-2. Choose **size** → **mode** (color/mono) → **quality**.
-3. Send a video (up to 3 minutes) as a video or a file.
-4. Wait for the progress bar; the bot replies with your ASCII `.mp4`.
-5. Send `/stop` at any time to cancel the current render.
+## использование
 
-## How it works
+Отправьте `/start`, выберите размер, режим и качество, затем загрузите видео сообщением или файлом. Бот покажет прогресс и отправит готовый MP4. Для отмены отправьте `/stop`.
 
-Each frame is downscaled to a character grid, every pixel is mapped to an ASCII
-glyph by brightness, and the glyphs are drawn back onto a blank canvas with PIL.
-Frames are processed in parallel and stitched into a video with MoviePy.
-
-## License
+## лицензия
 
 [MIT](../../LICENSE) © George Zhurik

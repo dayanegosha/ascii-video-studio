@@ -6,11 +6,10 @@
   <title>ASCII Video Converter</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/@vkontakte/vk-bridge@2.12.1/dist/browser.js"></script>
-  <!-- Подключаем gifshot (оставляем для fallback, но не используем) -->
   <script src="https://cdn.jsdelivr.net/npm/gifshot@0.2.0/build/gifshot.min.js"></script>
   <style>
     .container {
-      padding-bottom: 50px; /* Space for footer */
+      padding-bottom: 50px; /* Место для закреплённого подвала. */
     }
     .footer {
       position: fixed;
@@ -46,7 +45,6 @@
       <p>Видео в ASCII</p>
     </div>
 
-    <!-- Шаг 1: Выбор размера -->
     <div class="step" id="step-size">
       <h2>Выбери размер</h2>
       <div class="button-group">
@@ -56,7 +54,6 @@
       </div>
     </div>
 
-    <!-- Шаг 1.1: Выбор символов -->
     <div class="step hidden" id="step-symbols">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <button class="btn" id="btn-back-symbols" style="padding:8px 16px; font-size:14px;">← Назад</button>
@@ -69,7 +66,6 @@
       </div>
     </div>
 
-    <!-- Шаг 2: Выбор режима -->
     <div class="step hidden" id="step-mode">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <button class="btn" id="btn-back-mode" style="padding:8px 16px; font-size:14px;">← Назад</button>
@@ -82,7 +78,6 @@
       </div>
     </div>
 
-    <!-- Шаг 3: Загрузка видео -->
     <div class="step hidden" id="step-upload">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <button class="btn" id="btn-back-upload" style="padding:8px 16px; font-size:14px;">← Назад</button>
@@ -95,7 +90,6 @@
       </div>
     </div>
 
-    <!-- Шаг 4: Обработка (БОЛЬШОЙ круговой прогресс) -->
     <div class="step hidden" id="step-processing">
       <h2 style="text-align:center; margin-bottom:40px;">Обработка видео</h2>
       <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
@@ -128,7 +122,6 @@
       <button class="btn" id="cancel-btn" style="margin-top:20px; background:#ff4444; color:white;">Отмена</button>
     </div>
 
-    <!-- Шаг 5: Результат -->
     <div class="step hidden" id="step-result">
       <h2>Готово!</h2>
       <div style="position:relative; width:100%; background:#000; border-radius:16px; overflow:hidden;">

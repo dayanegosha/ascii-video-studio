@@ -1,54 +1,30 @@
-# ASCII Video Studio — Web / VK Mini App
+# .ascii video studio — браузер
 
-A **VK Mini App** that converts a video into **ASCII-art video** entirely in the
-browser — no upload, no backend. Pick a few options, and every frame is redrawn
-as ASCII on a `<canvas>` and recorded back into a playable clip.
+Конвертер видео в ASCII-анимацию для VK Mini Apps. Работает на устройстве: кадры обрабатываются через Canvas, результат записывается через MediaRecorder.
 
-> Need server-side rendering in a chat? See the
-> **[Telegram edition](../telegram)** in this workspace.
+Можно выбрать детализацию, набор символов и цветной или монохромный режим. Видео ограничено тремя минутами, обработку можно отменить.
 
-## Features
+Серверная версия находится в [`apps/telegram`](../telegram).
 
-- 100% client-side: frames are processed with `<canvas>` and saved via
-  `MediaRecorder` — the video never leaves the device
-- Detail **size** (small / medium / large) via adjustable font size
-- Two **character sets**: basic (` .:+-*#%`) and extended (70+ glyphs)
-- **Colored** or **monochrome** output
-- Circular progress indicator with cancel support
-- Runs inside VK through [`@vkontakte/vk-bridge`](https://dev.vk.com/mini-apps/getting-started)
-- Input limited to 3 minutes to keep things responsive
+## запуск
 
-## Tech stack
-
-Vanilla JavaScript, HTML5 Canvas & MediaRecorder, `@vkontakte/vk-bridge`.
-No framework, no build step required to run.
-
-## Run locally
-
-```bash
+```sh
 git clone https://github.com/dayanegosha/ascii-video-studio.git
 cd ascii-video-studio/apps/web
-
 npm install
-npm start          # serves the folder on a local static server
+npm start
 ```
 
-Then open the printed URL. To test inside VK, point your Mini App's settings to
-this origin (or a deployed copy).
+Откройте адрес, который напечатает сервер. Для запуска внутри VK укажите этот адрес или адрес опубликованной копии в настройках Mini App.
 
-## Build
+## сборка
 
-```bash
-npm run build      # copies index.html, style.css and script.js into dist/
+```sh
+npm run build
 ```
 
-## How it works
+Команда копирует `index.html`, `style.css` и `script.js` в `dist/`.
 
-Each video frame is drawn to an offscreen canvas, sampled on a character grid,
-and every cell's brightness is mapped to an ASCII glyph. The glyphs are rendered
-onto the visible canvas and the canvas stream is captured with `MediaRecorder`
-into the final video.
-
-## License
+## лицензия
 
 [MIT](../../LICENSE) © George Zhurik

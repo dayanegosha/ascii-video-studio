@@ -1,5 +1,3 @@
-// script.js — ПОЛНАЯ РАБОЧАЯ ВЕРСИЯ (18 ноября 2025)
-
 const bridge = window.vkBridge;
 
 let userSettings = {
@@ -38,7 +36,6 @@ function updateProgress(percent) {
   document.getElementById('progress-percent').textContent = `${Math.round(percent)}%`;
 }
 
-// ===================== ОСНОВНАЯ ФУНКЦИЯ =====================
 async function processVideoToAscii(file, size, symbols, mode) {
   return new Promise((resolve, reject) => {
     const sourceVideo = document.createElement('video');
@@ -77,7 +74,6 @@ async function processVideoToAscii(file, size, symbols, mode) {
 
       const asciiChars = SYMBOLS_SETS[symbols];
 
-      // === ФИКС ДЛИТЕЛЬНОСТИ: фиксированный FPS + правильный mimeType ===
       const FPS = 30;
       const stream = canvas.captureStream(FPS);
 
@@ -117,9 +113,9 @@ async function processVideoToAscii(file, size, symbols, mode) {
 
       recorder.onerror = () => reject(new Error('Ошибка MediaRecorder'));
 
-      recorder.start(); // ← БЕЗ timeslice — это главное!
+      // Забираем запись целиком после остановки, без промежуточных фрагментов.
+      recorder.start();
 
-      // Точный прогресс по реальному времени
       recordingStartTime = performance.now();
       progressInterval = setInterval(() => {
         const elapsed = (performance.now() - recordingStartTime) / 1000;
@@ -127,12 +123,11 @@ async function processVideoToAscii(file, size, symbols, mode) {
         updateProgress(percent);
       }, 100);
 
-      // Принудительная остановка на случай косяков
+      // Останавливаем запись, если событие ended не пришло.
       const forceStop = setTimeout(() => {
         if (recorder.state === 'recording') recorder.stop();
       }, sourceVideo.duration * 1000 + 5000);
 
-      // === Отрисовка кадра ===
       const scaleX = TARGET_W / sourceVideo.videoWidth;
       const scaleY = TARGET_H / sourceVideo.videoHeight;
       const scale = Math.min(scaleX, scaleY);
@@ -189,13 +184,11 @@ async function processVideoToAscii(file, size, symbols, mode) {
   });
 }
 
-// ===================== ШАГИ ИНТЕРФЕЙСА =====================
 function showStep(stepId) {
   document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
   document.getElementById(stepId).classList.remove('hidden');
 }
 
-// Кнопки выбора
 document.querySelectorAll('[data-size]').forEach(btn => {
   btn.addEventListener('click', () => {
     userSettings.size = btn.dataset.size;
@@ -217,12 +210,10 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
   });
 });
 
-// Кнопки «Назад»
 document.getElementById('btn-back-symbols')?.addEventListener('click', () => showStep('step-size'));
 document.getElementById('btn-back-mode')?.addEventListener('click', () => showStep('step-symbols'));
 document.getElementById('btn-back-upload')?.addEventListener('click', () => showStep('step-mode'));
 
-// ===================== ЗАГРУЗКА ФАЙЛА =====================
 const dropArea = document.getElementById('drop-area');
 const fileInput = document.getElementById('file-input');
 
@@ -284,7 +275,6 @@ async function handleVideoFile(file) {
     resultVideo.src = url;
     resultVideo.loop = true;
 
-    // Сохраняем расширение для скачивания
     window.currentFileExt = fileExt;
 
     showStep('step-result');
@@ -298,7 +288,6 @@ async function handleVideoFile(file) {
   }
 }
 
-// ===================== КНОПКИ В РЕЗУЛЬТАТЕ =====================
 document.getElementById('play-btn')?.addEventListener('click', () => document.getElementById('result-video').play());
 document.getElementById('pause-btn')?.addEventListener('click', () => document.getElementById('result-video').pause());
 
@@ -309,17 +298,14 @@ document.getElementById('cancel-btn')?.addEventListener('click', () => {
   showStep('step-upload');
 });
 
-// Реклама и разблокировка кнопок
 async function showAdAndEnableButtons() {
-  // твоя реклама остаётся без изменений
   try {
     if (bridge) await bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-  } catch (e) { /* ignore */ }
+  } catch (e) { /* Ошибка рекламы не мешает скачать результат. */ }
   document.getElementById('download-btn').disabled = false;
   document.getElementById('retry-btn').disabled = false;
 }
 
-// Скачивание
 document.getElementById('download-btn').addEventListener('click', async () => {
   if (!processedVideoBlobUrl) return;
 
@@ -345,7 +331,6 @@ document.getElementById('retry-btn').addEventListener('click', () => {
   showStep('step-size');
 });
 
-// ===================== ИНИЦИАЛИЗАЦИЯ =====================
 document.addEventListener('DOMContentLoaded', () => {
   showStep('step-size');
   if (bridge) bridge.send('VKWebAppInit');

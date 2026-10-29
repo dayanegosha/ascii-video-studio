@@ -118,7 +118,7 @@ def frame_to_ascii_image_pil(frame, size="medium", colored=False, quality="об�
             gray = int(0.3 * r + 0.59 * g + 0.11 * b)
             char = map_gray_to_char(gray)
             if colored:
-                color = (r, g, b)  # RGB for PIL: red, green, blue
+                color = (r, g, b)  # OpenCV читает BGR, Pillow принимает RGB.
             else:
                 color = (gray, gray, gray)
             draw.text(
@@ -174,7 +174,7 @@ async def process_video_progress(file_path: str, size: str, colored: bool, quali
                     break
                 total_frames += 1
             cap.release()
-            cap = cv2.VideoCapture(file_path)  # Reopen
+            cap = cv2.VideoCapture(file_path)
 
         duration_sec = total_frames / fps
         if duration_sec > 180:

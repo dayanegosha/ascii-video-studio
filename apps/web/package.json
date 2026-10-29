@@ -1,7 +1,7 @@
 {
   "name": "ascii-video-converter",
   "version": "1.0.0",
-  "description": "A VK Mini App to convert videos to ASCII art",
+  "description": "Конвертер видео в ASCII-анимацию для VK Mini Apps",
   "main": "script.js",
   "scripts": {
     "start": "serve",
